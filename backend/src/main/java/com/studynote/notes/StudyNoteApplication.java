@@ -17,7 +17,7 @@ public class StudyNoteApplication {
     /*
      * @Author:  Fish
      * @date:  2026/9/2 15:03
-     * @Description: 测试一下git，这个才是正确的版本
+     * @Description: 测试一下git，这个才是正确的版本，再测试测试 拉取远程仓库并和并到本地
      * @params:
      * @return:
      */
