@@ -46,9 +46,7 @@ mybatis:
 # XML 中使用全路径 resultType/com.studynote.notes.model.entity.Xxx
 
 jwt:
-  # ⚠️ 这里原本是 abc123 —— 太弱了，任何人拿它就能伪造出任意 userId 的 token。
-  # 仓库里只留占位符，本机通过环境变量 JWT_SECRET 注入真实值。
-  secret: ${JWT_SECRET:CHANGE_ME_请换成一串随机字符串}
+  secret: ${JWT_SECRET:CHANGE_ME}
   expiration: 2592000
 
 server:
