@@ -16,6 +16,9 @@ backend/target/
 frontend/dist/
 frontend/.vite/
 
+# IDEA 编译输出
+out/
+
 # ========== 二、依赖（体积巨大，靠 package.json / pom.xml 还原）==========
 
 node_modules/
@@ -53,11 +56,10 @@ application-local.yml
 .vscode/
 *.swp
 
-# ========== 六、Claude Code 的本地会话数据 ==========
-# settings.json 可以共享（团队约定），settings.local.json 是本机私有的
-.claude/settings.local.json
-.claude/plans/
-.claude/worktrees/
+# ========== 六、AI 助手配置 / 个人笔记 ==========
+# 这些是本机工具配置和随手记，跟项目代码无关，别人 clone 下来也用不上
+.claude/
+AGENTS.md
 
 # ========== 七、操作系统生成的文件 ==========
 
