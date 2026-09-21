@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 /**
  * @ClassName Note
  * @Description 笔记实体类
- * @Author Tong
  * @LastChangeDate 2024-12-16 20:01
  * @Version v1.0
  */

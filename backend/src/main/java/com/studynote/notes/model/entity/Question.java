@@ -8,7 +8,6 @@ import java.util.Date;
 /**
  * @ClassName Question
  * @Description 问题实体类
- * @Author Tong
  * @LastChangeDate 2024-12-16 19:56
  * @Version v1.0
  */

@@ -6,7 +6,6 @@ import java.util.Date;
 /**
  * @ClassName NoteLike
  * @Description 笔记点赞关联实体类
- * @Author Tong
  * @LastChangeDate 2024-12-16 20:04
  * @Version v1.0
  */

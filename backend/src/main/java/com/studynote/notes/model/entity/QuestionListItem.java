@@ -6,7 +6,6 @@ import java.util.Date;
 /**
  * @ClassName QuestionListItem
  * @Description 题单-题目关联实体类
- * @Author Tong
  * @LastChangeDate 2024-12-16 20:15
  * @Version v1.0
  */

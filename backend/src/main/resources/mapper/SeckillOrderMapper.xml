@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.studynote.notes.mapper.SeckillOrderMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="orderId"
+            parameterType="com.studynote.notes.model.entity.SeckillOrder">
+        INSERT INTO seckill_order (activity_id, user_id, course_id, price, status,active_flag)
+        VALUES (#{activityId}, #{userId}, #{courseId}, #{price}, #{status},#{activeFlag})
+    </insert>
+    <select id="findByActivityIdAndUserId" resultType="com.studynote.notes.model.entity.SeckillOrder">
+        SELECT *
+        from seckill_order
+        where activity_id = #{activityId}
+        and user_id = #{userId} AND status != 2
+    </select>
+    <select id="findByOrderId" resultType="com.studynote.notes.model.entity.SeckillOrder">
+        SELECT *
+        from seckill_order
+        where order_id = #{orderId}
+    </select>
+    <select id="findActiveUserIdsByActivityId" resultType="java.lang.Long">
+        SELECT user_id
+        from seckill_order
+        where activity_id = #{activityId}
+        and status != 2
+    </select>
+    <update id="updateStatus" parameterType="com.studynote.notes.model.entity.SeckillOrder">
+        update seckill_order
+        set status = 1,paid_at = NOW()
+        where order_id = #{orderId}
+        and status = 0
+    </update>
+
+    <select id="findTimeoutOrders" resultType="com.studynote.notes.model.entity.SeckillOrder">
+        SELECT * FROM seckill_order
+        WHERE status = 0 AND created_at &lt; #{deadline}
+        ORDER BY order_id
+        LIMIT #{limit}
+    </select>
+
+    <update id="cancelOrder" parameterType="com.studynote.notes.model.entity.SeckillOrder">
+        update  seckill_order
+        set status = 2,cancelled_at = NOW(),active_flag = NULL
+        where order_id = #{orderId}
+        and status = 0
+    </update>
+
+</mapper>

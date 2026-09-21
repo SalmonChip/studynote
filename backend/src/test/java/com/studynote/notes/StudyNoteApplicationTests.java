@@ -11,7 +11,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 /**
  * @ClassName StudyNoteApplication
  * @Description 测试类
- * @Author Tong
  * @LastChangeDate 2024-12-16 14:21
  * @Version v1.0
  */

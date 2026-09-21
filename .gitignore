@@ -1,0 +1,73 @@
+# ==========================================================
+#  拾题社区 —— Git 忽略规则
+#  原则：只提交「源代码 + 构建脚本 + 文档」。
+#        凡是「能重新生成的」「跟本机绑定的」「用户产生的」「含密钥的」都不提交。
+# ==========================================================
+
+# ========== 一、构建产物（能重新生成，提交了只会污染 diff）==========
+
+# Java：mvn 编译输出
+backend/target/
+*.class
+*.jar
+*.war
+
+# 前端：vite 打包输出
+frontend/dist/
+frontend/.vite/
+
+# ========== 二、依赖（体积巨大，靠 package.json / pom.xml 还原）==========
+
+node_modules/
+
+# ========== 三、运行时数据（程序跑起来才产生的，绝不能提交）==========
+
+# 运行日志：里面有 traceId、SQL 语句、用户请求数据
+logs/
+*.log
+*.log.gz
+
+# 用户上传的文件（头像、附件……）—— 这是用户数据，不是代码
+backend/tmp/
+
+# ========== 四、密钥与本地配置（最重要的一段）==========
+#
+# 规则：仓库里只放「模板」，真实密钥放本地、永不提交。
+#      application*.yaml 里凡是用 ${ENV_VAR:默认值} 写的地方，
+#      本地通过环境变量注入自己的真实值。
+
+# 本地覆盖配置（放真实密码用）
+application-local.yaml
+application-local.yml
+
+# 前端本地环境变量（Vite 约定）
+.env.local
+.env.*.local
+
+# ========== 五、IDE / 编辑器（每个人的都不一样）==========
+
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.swp
+
+# ========== 六、Claude Code 的本地会话数据 ==========
+# settings.json 可以共享（团队约定），settings.local.json 是本机私有的
+.claude/settings.local.json
+.claude/plans/
+.claude/worktrees/
+
+# ========== 七、操作系统生成的文件 ==========
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ========== 八、杂项 ==========
+
+*.tmp
+*.bak
+*.orig
+*~

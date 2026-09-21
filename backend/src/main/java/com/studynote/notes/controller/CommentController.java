@@ -1,5 +1,6 @@
 package com.studynote.notes.controller;
 
+import com.studynote.notes.annotation.RateLimit;
 import com.studynote.notes.model.base.ApiResponse;
 import com.studynote.notes.model.base.EmptyVO;
 import com.studynote.notes.model.dto.comment.CommentQueryParams;

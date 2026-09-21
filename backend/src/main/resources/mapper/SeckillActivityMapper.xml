@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.studynote.notes.mapper.SeckillActivityMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="activityId"
+            parameterType="com.studynote.notes.model.entity.SeckillActivity">
+        INSERT INTO seckill_activity (course_id, seckill_price, stock, start_time, end_time, status)
+        VALUES (#{courseId}, #{seckillPrice}, #{stock}, #{startTime}, #{endTime}, #{status})
+    </insert>
+
+    <select id="activityList" resultType="com.studynote.notes.model.entity.SeckillActivity">
+        SELECT *
+        FROM seckill_activity
+        ORDER BY activity_id DESC
+    </select>
+
+    <select id="findById" resultType="com.studynote.notes.model.entity.SeckillActivity">
+        SELECT *
+        FROM seckill_activity
+        WHERE activity_id = #{activityId}
+    </select>
+
+    <update id="update" parameterType="com.studynote.notes.model.entity.SeckillActivity">
+        UPDATE seckill_activity
+        <set>
+            <if test="courseId != null">
+                course_id = #{courseId},
+            </if>
+            <if test="seckillPrice != null">
+                seckill_price = #{seckillPrice},
+            </if>
+            <if test="stock != null">
+                stock = #{stock},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        WHERE activity_id = #{activityId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE
+        FROM seckill_activity
+        WHERE activity_id = #{activityId}
+    </delete>
+    <update id="deduckStock">
+        update
+        seckill_activity
+        set stock  = stock  -1
+        where activity_id = #{activityId}
+        and stock > 0
+    </update>
+    <update id="addStock">
+        update
+        seckill_activity
+        set stock = stock + 1
+        where activity_id = #{activityId}
+    </update>
+</mapper>

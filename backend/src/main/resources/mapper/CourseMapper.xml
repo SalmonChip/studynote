@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.studynote.notes.mapper.CourseMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="courseId"
+            parameterType="com.studynote.notes.model.entity.Course">
+        INSERT INTO course (title, description, cover_url, price, status)
+        VALUES (#{title}, #{description}, #{coverUrl}, #{price}, #{status})
+    </insert>
+
+    <select id="courseList" resultType="com.studynote.notes.model.entity.Course">
+        SELECT *
+        FROM course
+        ORDER BY course_id DESC
+    </select>
+
+    <select id="findById" resultType="com.studynote.notes.model.entity.Course">
+        SELECT *
+        FROM course
+        WHERE course_id = #{courseId}
+    </select>
+
+    <update id="update" parameterType="com.studynote.notes.model.entity.Course">
+        UPDATE course
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="coverUrl != null">
+                cover_url = #{coverUrl},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        WHERE course_id = #{courseId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE
+        FROM course
+        WHERE course_id = #{courseId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/studynote_tech?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    # ⚠️ 这里原本是 root / 123456 明文，仓库里只留占位符。
+    # 本机通过环境变量 DB_USERNAME / DB_PASSWORD 注入真实值（下面有具体做法）。
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:CHANGE_ME}
+upload:
+  path: ${user.dir}/tmp/uploads # 指定上传文件的存储路径
+  url-prefix: http://localhost:8080/images  # 访问上传文件的URL前缀

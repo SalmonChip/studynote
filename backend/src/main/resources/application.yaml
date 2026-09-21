@@ -22,8 +22,9 @@ spring:
   mail:
     host: smtp.qq.com
     port: 465
-    username: your@qq.com
-    password: password
+    # 真实值走环境变量，仓库里只留占位符
+    username: ${MAIL_USERNAME:your@qq.com}
+    password: ${MAIL_PASSWORD:your-smtp-auth-code}
     properties:
       mail:
         smtp:
@@ -45,7 +46,9 @@ mybatis:
 # XML 中使用全路径 resultType/com.studynote.notes.model.entity.Xxx
 
 jwt:
-  secret: abc123
+  # ⚠️ 这里原本是 abc123 —— 太弱了，任何人拿它就能伪造出任意 userId 的 token。
+  # 仓库里只留占位符，本机通过环境变量 JWT_SECRET 注入真实值。
+  secret: ${JWT_SECRET:CHANGE_ME_请换成一串随机字符串}
   expiration: 2592000
 
 server:
@@ -57,3 +60,8 @@ mail:
     expire-minutes: 15 # 验证码过期时间 15 min
     limit-expire-seconds: 60 # 发送过一次验证码后，在 60s 内不能再发送验证码，用于限流
     template-path: "templates/mail/verify-code.html"
+# 自定义秒杀配置
+seckill:
+  order:
+    timeout-minutes: 1      # 待支付订单超时时间（分钟），超 时自动取消并回补库存
+    scan-batch-size: 100     # 定时任务每次扫描的最大订单数

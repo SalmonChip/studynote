@@ -6,7 +6,6 @@ import java.util.Date;
 /**
  * @ClassName Category
  * @Description 分类实体类
- * @Author Tong
  * @LastChangeDate 2024-12-16 19:53
  * @Version v1.0
  */

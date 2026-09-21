@@ -44,4 +44,32 @@ public class RedisKey {
     public static String messageTaskQueue() {
         return "queue:message:task";
     }
+
+    /**
+     * 秒杀库存 key
+     * 格式："seckill:stock:{activityId}"
+     * 值类型：String（数字）
+     */
+    public static String seckillStock(Integer activityId) {
+        return  "seckill:stock:"+activityId;
+    }
+
+    /**
+     * 秒杀已下单用户集合 key
+     * 格式："seckill:order:{activityId}"
+     * 值类型：Set，成员是 userId 字符串
+     */
+    public static String seckillOrderUserSet(Integer activityId) {
+        return "seckill:order:"+activityId;
+    }
+
+    /**
+     * 秒杀订单消息队列（Redis Stream）key
+     * 格式："stream:seckill:order"
+     * 注意：不加活动ID，因为消息体里带了 activityId
+     */
+    public static String seckillOrderStream() {
+        return "stream:seckill:order";
+    }
+
 }
