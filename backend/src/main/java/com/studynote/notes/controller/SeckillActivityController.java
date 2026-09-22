@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.studynote.notes.model.base.ApiResponse;
 import com.studynote.notes.model.base.EmptyVO;
-import com.studynote.notes.model.dto.seckill.CreateSeckillActivityBody;
-import com.studynote.notes.model.dto.seckill.UpdateSeckillActivityBody;
+import com.studynote.notes.model.dto.seckillActivity.CreateSeckillActivityBody;
+import com.studynote.notes.model.dto.seckillActivity.UpdateSeckillActivityBody;
 import com.studynote.notes.model.vo.seckill.CreateSeckillActivityVO;
 import com.studynote.notes.model.vo.seckill.SeckillActivityVO;
 import com.studynote.notes.service.SeckillActivityService;
