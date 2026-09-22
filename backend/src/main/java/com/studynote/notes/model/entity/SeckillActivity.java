@@ -2,6 +2,7 @@ package com.studynote.notes.model.entity;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -17,7 +18,7 @@ public class SeckillActivity {
     private Integer courseId;
 
     /** 秒杀价（分） */
-    private Long seckillPrice;
+    private BigDecimal seckillPrice;
 
     /** 秒杀库存 */
     private Integer stock;

@@ -12,13 +12,9 @@ spring:
     port: 6379
     database: 0
     timeout: 2000
-    jedis:
-      pool:
-        enabled: on
-        max-active: 8
-        max-idle: 8
-        min-idle: 0
-        max-wait: 2000
+    # 本项目用的是 Spring Boot 默认的 Lettuce 客户端，
+    # 这里原本有一段 spring.redis.jedis.pool 配置 —— 那是给 Jedis 用的，
+    # 配了也不会生效，只会误导后来的人以为连接池被调过。已删除。
   mail:
     host: smtp.qq.com
     port: 465
@@ -41,7 +37,12 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # StdOutImpl 会把每条 SQL 直接 println 到标准输出，绕过 log4j2：
+    #   ① 压测时是性能杀手（几十万行同步写 stdout）
+    #   ② 不受 log4j2-spring.xml 的级别控制，线上关不掉
+    # 换成 Slf4jImpl 后，SQL 日志走 log4j2，
+    # 平时按 com.studynote 的级别输出，要看 SQL 时把那个级别调成 debug 即可。
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
 # type-aliases-package 故意不设，避免 Collection 与 java.util.Collection 别名冲突
 # XML 中使用全路径 resultType/com.studynote.notes.model.entity.Xxx
 
@@ -52,6 +53,22 @@ jwt:
 server:
   port: 8080
 
+# 跨域白名单。逗号分隔，不要写成 YAML 列表 ——
+# YAML 的 "- xxx" 会被 Spring 展开成 cors.allowed-origins[0]/[1] 这种索引属性，
+# 而 ${cors.allowed-origins} 取的是不带下标的键，会直接报「无法解析占位符」启动失败。
+#
+# ★ localhost 和 127.0.0.1 在浏览器的同源策略里是【两个不同的源】，必须都写。
+#   前端 vite.config.ts 里 host 是 127.0.0.1，浏览器地址栏就是 http://127.0.0.1:5173；
+#   只写 localhost 会导致所有接口被 CorsFilter 拒成 403，
+#   而且因为 CorsFilter 在 DispatcherServlet 之前就返回了，应用日志里【一条记录都没有】，
+#   排查时会完全想不到是 CORS。
+#
+# ★ 用端口通配（:*) 而不是写死 5173，是因为 vite.config.ts 里没配 port/strictPort ——
+#   5173 被占用时 Vite 会静默启到 5174、5175，写死端口的话每换一次就 403 一次。
+#   生产环境务必换回精确域名。
+cors:
+  allowed-origins: http://localhost:*,http://127.0.0.1:*
+
 # 自定义邮件配置
 mail:
   verify-code:
@@ -61,5 +78,10 @@ mail:
 # 自定义秒杀配置
 seckill:
   order:
-    timeout-minutes: 1      # 待支付订单超时时间（分钟），超 时自动取消并回补库存
+    timeout-minutes: 15      # 待支付订单超时时间（分钟），超 时自动取消并回补库存
     scan-batch-size: 100     # 定时任务每次扫描的最大订单数
+  # 【对账】以 MySQL 为准定期重刷 Redis，修复跨系统漂移（见 SeckillReconcileTask）
+  reconcile:
+    batch-size: 50          # 单次最多对账几个活动
+    retain-hours: 24        # 只对账"最近 24 小时内结束或还未开始"的活动，别空刷历史
+    interval-ms: 600000     # 10 分钟一轮。对账是兜底修错，不需要跑得勤

@@ -27,22 +27,28 @@ public class SeckillOrderTimeoutTask {
 
     @Scheduled(fixedDelay = 5000)
     public void cancelTimeoutOrders() {
-            log.debug("定时任务扫描过期订单");
-            //1.计算当前时间 - 15分钟
-            Date now = new Date();
-            long time = now.getTime() - timeoutMinutes * 60L * 1000L;
-            Date deadline = new Date(time);
-            //2.计算回滚的订单库存和取消订单
-            List<SeckillOrder> orderList = seckillService.findTimeoutOrders(deadline, scanBatchSize);
+        log.debug("定时任务扫描过期订单");
+        //1.计算当前时间 - 15分钟
+        Date now = new Date();
+        long time = now.getTime() - timeoutMinutes * 60L * 1000L;
+        Date deadline = new Date(time);
+        //2.计算回滚的订单库存和取消订单
+        List<SeckillOrder> orderList = seckillService.findTimeoutOrders(deadline, scanBatchSize);
+
+        for (SeckillOrder order : orderList) {
             try {
-                for (SeckillOrder order : orderList) {
-                    //取消订单并回补库存
-                    seckillService.cancelTimeoutOrderOne(order);
+                //取消订单并回补库存
+                Boolean isCancelled = seckillService.cancelTimeoutOrderOne(order);
+                if (isCancelled) {
+                    seckillService.syncRedisAfterCancel(order.getActivityId(), order.getUserId());
+                } else {
+                    log.debug("订单已被支付或已取消，跳过 orderId={}",order.getOrderId());
                 }
             } catch (Exception e) {
                 log.error("超时订单任务处理", e);
             }
-
         }
+
     }
+}
 

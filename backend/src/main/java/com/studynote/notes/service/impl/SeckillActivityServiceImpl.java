@@ -56,7 +56,12 @@ public class SeckillActivityServiceImpl implements SeckillActivityService {
         if(course == null ) {
             return ApiResponseUtil.error("课程不存在");
         }
-        if(body.getSeckillPrice()>=course.getPrice()){
+        // ★ BigDecimal 的比大小必须用 compareTo，不能用 >= / < 运算符。
+        //   Java 里没有为 BigDecimal 重载运算符（它不是基本类型），写 >= 直接编译不过。
+        //   compareTo 返回 -1 / 0 / 1，判断"小于"就是 < 0。
+        //   也别用 equals —— 它连标度一起比，2.0 和 2.00 会判为不等，
+        //   金额比较要用 compareTo。
+        if(body.getSeckillPrice().compareTo(course.getPrice()) >= 0){
             return ApiResponseUtil.error("秒杀价必须低于原价");
         }
         if(!body.getStartTime().before(body.getEndTime())){

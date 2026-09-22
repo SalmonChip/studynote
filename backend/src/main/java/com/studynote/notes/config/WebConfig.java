@@ -1,6 +1,7 @@
 package com.studynote.notes.config;
 
 import com.studynote.notes.filter.TraceIdFilter;
+import com.studynote.notes.interceptor.AdminInterceptor;
 import com.studynote.notes.interceptor.TokenInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private TokenInterceptor tokenInterceptor;
 
+    @Autowired
+    private AdminInterceptor adminInterceptor;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
@@ -32,9 +36,16 @@ public class WebConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // 顺序要紧：先解析 token 填好 RequestScopeData，再判权限
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/login", "/error");
+
+        // 管理员接口：只拦 /api/admin/** 这一片
+        // 这里就是「默认安全」的落点 —— 以后新加的任何 /api/admin/xxx 接口，
+        // 不用改任何代码，自动就在保护范围内
+        registry.addInterceptor(adminInterceptor)
+                .addPathPatterns("/api/admin/**");
     }
 
     @Override

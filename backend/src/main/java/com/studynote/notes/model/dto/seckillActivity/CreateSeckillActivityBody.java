@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -15,7 +16,7 @@ public class CreateSeckillActivityBody {
 
     @NotNull(message = "秒杀价不能为空")
     @Min(value = 0, message = "秒杀价不能为负")
-    private Long seckillPrice;
+    private BigDecimal seckillPrice;
 
     @NotNull(message = "库存不能为空")
     @Min(value = 1, message = "库存必须大于0")

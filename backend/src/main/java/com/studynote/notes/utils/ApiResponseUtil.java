@@ -14,11 +14,18 @@ public class ApiResponseUtil {
      * @return ApiResponse
      */
     public static <T> ApiResponse<T> success(String message) {
-        return ApiResponse.success(null);
+        return ApiResponse.success(message, null);
     }
 
+    /**
+     * 构建成功的响应（带数据）
+     * <p>
+     * 注意第二个参数是 data，不是 message —— message 是第一个参数。
+     * 两个参数以前都被丢掉了（一个丢 message、一个直接调 success(data)），
+     * 现在都透传给 ApiResponse。
+     */
     public static <T> ApiResponse<T> success(String message, T data) {
-        return ApiResponse.success(data);
+        return ApiResponse.success(message, data);
     }
 
     /**

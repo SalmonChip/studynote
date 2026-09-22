@@ -72,4 +72,13 @@ public class RedisKey {
         return "stream:seckill:order";
     }
 
+    /**
+     * 秒杀活动预热集合
+     * 格式："stream:seckill:order"
+     *
+     */
+    public static String seckillActivity(Integer activityId) {
+        return "seckill:activity:"+activityId;
+    }
+
 }

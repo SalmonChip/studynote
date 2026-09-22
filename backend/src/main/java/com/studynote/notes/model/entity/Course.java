@@ -2,6 +2,7 @@ package com.studynote.notes.model.entity;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -25,7 +26,7 @@ public class Course {
     private String coverUrl;
 
     /** 课程价格（单位：分；绝不用 double/float） */
-    private Long price;
+    private BigDecimal price;
 
     /** 状态：0 下架，1 上架 */
     private Integer status;

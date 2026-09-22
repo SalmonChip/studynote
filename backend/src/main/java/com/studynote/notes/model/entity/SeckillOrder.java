@@ -2,6 +2,7 @@ package com.studynote.notes.model.entity;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -23,7 +24,7 @@ public class SeckillOrder {
     private Integer courseId;
 
     /** 成交价（分） */
-    private Long price;
+    private BigDecimal price;
 
     /** 状态：0 待支付，1 已支付，2 已取消 */
     private Integer status;

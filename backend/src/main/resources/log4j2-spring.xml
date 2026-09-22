@@ -30,8 +30,26 @@
 
     <!-- 2. 配置日志记录器（Logger） -->
     <Loggers>
-        <!-- 指定某些包或类的日志级别，如果需要可以继续添加 -->
-        <Logger name="com.studynote" level="debug" additivity="false">
+        <!--
+            项目自己的日志级别。
+            原来是 debug —— 开发时方便，但压测时每个请求都要写好几行日志，
+            同步 IO 会直接吞掉吞吐量。默认改成 info。
+            要看 MyBatis 的 SQL 时，把这里改回 debug 即可
+            （配合 application.yaml 里 log-impl = Slf4jImpl，SQL 才会走这里）。
+        -->
+        <Logger name="com.studynote" level="info" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="File" />
+        </Logger>
+
+        <!--
+            临时诊断：CORS 拒绝时 DefaultCorsProcessor 会在这里打一行
+            "Reject: 'xxx' origin is not allowed"。
+            这是排查 403 的【唯一】线索 —— 因为 CorsFilter 在 DispatcherServlet
+            之前就返回了，com.studynote 的日志里根本不会留下任何记录。
+            查完把 level 改回 info（或删掉这个 Logger）。
+        -->
+        <Logger name="org.springframework.web.cors" level="debug" additivity="false">
             <AppenderRef ref="Console" />
             <AppenderRef ref="File" />
         </Logger>

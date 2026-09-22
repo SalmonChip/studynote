@@ -50,7 +50,7 @@
         FROM seckill_activity
         WHERE activity_id = #{activityId}
     </delete>
-    <update id="deduckStock">
+    <update id="deductStock">
         update
         seckill_activity
         set stock  = stock  -1
@@ -63,4 +63,24 @@
         set stock = stock + 1
         where activity_id = #{activityId}
     </update>
+
+    <!--
+      【对账】候选活动：当前【不在】秒杀时间窗口内的活动。
+
+        "不在窗口内" = 已经结束 (end_time < now) 或 还没开始 (start_time > now)
+        换句话说，正在进行中的活动被【刻意排除】在外 ——
+        理由见 SeckillService#reconcileOne 的注释（DEL 集合的窗口 + MySQL stock 滞后），
+        这是正确性要求，不是性能优化。改动这个 WHERE 之前先把那段读完。
+
+        from 是时间下界：只修"最近结束"的活动，避免每轮都把全部历史活动空刷一遍。
+        对于"还没开始"的活动，它的 end_time 必然在将来，天然满足 end_time > from。
+    -->
+    <select id="findReconcileCandidates" resultType="java.lang.Integer">
+        SELECT activity_id
+        FROM seckill_activity
+        WHERE (end_time &lt; #{now} OR start_time &gt; #{now})
+          AND end_time &gt; #{from}
+        ORDER BY activity_id
+        LIMIT #{limit}
+    </select>
 </mapper>
