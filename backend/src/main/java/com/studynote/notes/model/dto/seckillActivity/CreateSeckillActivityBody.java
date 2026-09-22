@@ -1,4 +1,4 @@
-package com.studynote.notes.model.dto.seckill;
+package com.studynote.notes.model.dto.seckillActivity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
