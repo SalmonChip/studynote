@@ -5,12 +5,6 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-/**
- * @ClassName Question
- * @Description 问题实体类
- * @LastChangeDate 2024-12-16 19:56
- * @Version v1.0
- */
 @Data
 public class Question {
     /*

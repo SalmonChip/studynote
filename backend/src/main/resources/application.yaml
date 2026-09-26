@@ -57,15 +57,10 @@ server:
 # YAML 的 "- xxx" 会被 Spring 展开成 cors.allowed-origins[0]/[1] 这种索引属性，
 # 而 ${cors.allowed-origins} 取的是不带下标的键，会直接报「无法解析占位符」启动失败。
 #
-# ★ localhost 和 127.0.0.1 在浏览器的同源策略里是【两个不同的源】，必须都写。
-#   前端 vite.config.ts 里 host 是 127.0.0.1，浏览器地址栏就是 http://127.0.0.1:5173；
-#   只写 localhost 会导致所有接口被 CorsFilter 拒成 403，
-#   而且因为 CorsFilter 在 DispatcherServlet 之前就返回了，应用日志里【一条记录都没有】，
-#   排查时会完全想不到是 CORS。
-#
-# ★ 用端口通配（:*) 而不是写死 5173，是因为 vite.config.ts 里没配 port/strictPort ——
-#   5173 被占用时 Vite 会静默启到 5174、5175，写死端口的话每换一次就 403 一次。
-#   生产环境务必换回精确域名。
+# localhost 和 127.0.0.1 同源策略下是两个不同的源，必须都写；前端 host 是 127.0.0.1，
+# 只写 localhost 会导致接口被 CorsFilter 返回 403，且应用日志中无记录，不易排查。
+# 用端口通配 :* 是因为 vite.config.ts 未固定端口，5173 被占用时会启到 5174/5175；
+# 生产环境需换回精确域名。
 cors:
   allowed-origins: http://localhost:*,http://127.0.0.1:*
 
@@ -80,7 +75,7 @@ seckill:
   order:
     timeout-minutes: 15      # 待支付订单超时时间（分钟），超 时自动取消并回补库存
     scan-batch-size: 100     # 定时任务每次扫描的最大订单数
-  # 【对账】以 MySQL 为准定期重刷 Redis，修复跨系统漂移（见 SeckillReconcileTask）
+  # 对账：以 MySQL 为准定期重刷 Redis，修复跨系统漂移（见 SeckillReconcileTask）
   reconcile:
     batch-size: 50          # 单次最多对账几个活动
     retain-hours: 24        # 只对账"最近 24 小时内结束或还未开始"的活动，别空刷历史

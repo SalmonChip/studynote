@@ -3,6 +3,7 @@ package com.studynote.notes.mapper;
 import com.studynote.notes.model.dto.note.NoteQueryParams;
 import com.studynote.notes.model.entity.Note;
 import com.studynote.notes.model.vo.note.NoteHeatMapItem;
+import com.studynote.notes.model.vo.note.NoteQuestionItem;
 import com.studynote.notes.model.vo.note.NoteRankListItem;
 import com.studynote.notes.model.vo.note.Top3Count;
 import org.apache.ibatis.annotations.Mapper;
@@ -68,6 +69,16 @@ public interface NoteMapper {
      */
     Set<Integer> filterFinishedQuestionIdsByUser(@Param("authorId") Long authorId,
                                                  @Param("questionIds") List<Integer> questionIds);
+
+    /**
+     * 批量查询笔记所属题目的摘要（笔记 ID → 题目 ID + 标题）。
+     * 一次 JOIN 查完，不在 Java 里循环逐条查题目（N+1）。
+     * 笔记或所属题目已删除的 noteId 不会出现在结果里，返回条数可能少于传入的 noteIds。
+     *
+     * @param noteIds 笔记 ID 列表
+     * @return 笔记与题目的对应关系，顺序不保证
+     */
+    List<NoteQuestionItem> findQuestionItemsByNoteIds(@Param("noteIds") List<Integer> noteIds);
 
     /**
      * 插入一条新的笔记

@@ -294,4 +294,26 @@
         LIMIT #{limit} OFFSET #{offset}
     </select>
 
+    <!-- 批量取「笔记 ID → 题目摘要」。用 INNER JOIN：题目没了这条消息也没地方可跳，
+         不返回比返回 questionId=null 的半成品更省事，调用方按「查不到」处理即可。 -->
+    <select id="findQuestionItemsByNoteIds"
+            resultType="com.studynote.notes.model.vo.note.NoteQuestionItem">
+        SELECT
+            n.note_id     AS noteId,
+            q.question_id AS questionId,
+            q.title       AS title
+        FROM note n
+        INNER JOIN question q ON q.question_id = n.question_id
+        WHERE
+        <if test="noteIds != null and noteIds.size > 0">
+            n.note_id IN
+            <foreach collection="noteIds" item="noteId" open="(" separator="," close=")">
+                #{noteId}
+            </foreach>
+        </if>
+        <if test="noteIds == null or noteIds.size == 0">
+            1 = 2 <!-- 空列表时给一个永远不成立的条件，避免 IN () 语法错误 -->
+        </if>
+    </select>
+
 </mapper>

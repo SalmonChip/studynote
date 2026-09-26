@@ -70,8 +70,6 @@ public class NoteLikeServiceImpl implements NoteLikeService {
             messageDTO.setTargetId(noteId);
             messageDTO.setIsRead(false);
 
-            System.out.println(messageDTO);
-
             messageService.asyncCreateMessage(messageDTO);
 
             return ApiResponseUtil.success("点赞成功");

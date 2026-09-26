@@ -5,12 +5,6 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/**
- * @ClassName User
- * @Description 用户实体类
- * @LastChangeDate 2024-12-16 10:27
- * @Version v1.0
- */
 @Data
 @ToString
 @AllArgsConstructor

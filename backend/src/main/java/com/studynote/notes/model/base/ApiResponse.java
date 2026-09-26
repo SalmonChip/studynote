@@ -53,13 +53,8 @@ public class ApiResponse<T> {
     /**
      * 创建成功响应（自定义 message）
      * <p>
-     * 【为什么需要这个重载】
-     * 原来的 {@code success(T data)} 把 message 写死成 "success"，
-     * 于是 ApiResponseUtil.success(String message) 传进来的消息没地方放，只能被丢掉
-     * —— warmUp 的"预热成功，库存=100"就是这么消失的。
-     * <p>
-     * message 在这个响应模型里是一等公民（前端会拿它弹提示），
-     * 那就必须有一个入口能让调用方把它设进去。
+     * 前端会拿 message 弹提示，所以必须有入口把它设进去：
+     * 原来的 {@code success(T data)} 把 message 写死成 "success"，传进来也只能被丢掉。
      *
      * @param message 响应消息
      * @param data 响应数据

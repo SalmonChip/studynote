@@ -8,12 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-/**
- * @ClassName StudyNoteApplication
- * @Description 测试类
- * @LastChangeDate 2024-12-16 14:21
- * @Version v1.0
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = StudyNoteApplication.class)

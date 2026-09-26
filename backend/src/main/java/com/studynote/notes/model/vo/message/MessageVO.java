@@ -57,7 +57,8 @@ public class MessageVO {
     public static class Target {
         private Integer targetId;
         private Integer targetType;
-        private QuestionSummary questionSummary;
+        /** 目标所属的题目，名字跟 NoteVO.question 保持一致；目标笔记或题目已删除时为 null，前端据此决定是否显示「跳转题目」 */
+        private QuestionSummary question;
     }
 
     @Data

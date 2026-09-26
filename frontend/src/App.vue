@@ -16,6 +16,8 @@ const links = [
   ['/admin/category', '分类管理'],
   ['/admin/question', '题目管理'],
   ['/admin/question-list', '题单管理'],
+  ['/admin/course', '课程管理'],
+  ['/admin/seckill-activity', '秒杀管理'],
 ]
 watch(
   () => route.query.login,
@@ -54,6 +56,8 @@ function logout() {
           <RouterLink to="/home">首页</RouterLink>
           <RouterLink to="/question-set">题库</RouterLink>
           <RouterLink to="/question-list">题单</RouterLink>
+          <RouterLink to="/seckill">秒杀</RouterLink>
+          <RouterLink v-if="session.loggedIn" to="/my-courses">我的课程</RouterLink>
         </nav>
         <div class="header-actions">
           <SearchModal />
@@ -72,6 +76,12 @@ function logout() {
                   </a-menu-item>
                   <a-menu-item key="center">
                     <RouterLink to="/user-center/info">个人中心</RouterLink>
+                  </a-menu-item>
+                  <a-menu-item key="orders">
+                    <RouterLink to="/seckill/orders">我的秒杀订单</RouterLink>
+                  </a-menu-item>
+                  <a-menu-item key="courses">
+                    <RouterLink to="/my-courses">我的课程</RouterLink>
                   </a-menu-item>
                   <a-menu-item v-if="session.isAdmin" key="admin">
                     <RouterLink to="/admin">管理后台</RouterLink>

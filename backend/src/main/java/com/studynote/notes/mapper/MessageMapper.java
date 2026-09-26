@@ -2,7 +2,6 @@ package com.studynote.notes.mapper;
 
 import com.studynote.notes.model.dto.message.MessageQueryParams;
 import com.studynote.notes.model.entity.Message;
-import com.studynote.notes.model.vo.message.UnreadCountByType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -80,12 +79,4 @@ public interface MessageMapper {
      * @return 未读消息数量
      */
     int countUnread(@Param("userId") Long userId);
-
-    /**
-     * 按类型统计未读消息数量
-     *
-     * @param userId 用户ID
-     * @return 各类型未读消息数量
-     */
-    List<UnreadCountByType> countUnreadByType(@Param("userId") Long userId);
-} 
+}

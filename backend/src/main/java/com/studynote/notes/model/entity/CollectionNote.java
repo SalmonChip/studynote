@@ -3,12 +3,6 @@ package com.studynote.notes.model.entity;
 import lombok.Data;
 import java.util.Date;
 
-/**
- * @ClassName CollectionNote
- * @Description 收藏夹-笔记关联实体类
- * @LastChangeDate 2024-12-16 20:11
- * @Version v1.0
- */
 @Data
 public class CollectionNote {
     /*

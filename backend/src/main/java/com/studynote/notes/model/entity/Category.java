@@ -3,12 +3,6 @@ package com.studynote.notes.model.entity;
 import lombok.Data;
 import java.util.Date;
 
-/**
- * @ClassName Category
- * @Description 分类实体类
- * @LastChangeDate 2024-12-16 19:53
- * @Version v1.0
- */
 @Data
 public class Category {
     /*

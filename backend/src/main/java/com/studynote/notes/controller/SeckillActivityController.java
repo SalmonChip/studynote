@@ -60,17 +60,12 @@ public class SeckillActivityController {
     /**
      * 预热秒杀活动：把 MySQL 的库存和已下单用户装载到 Redis。
      *
-     * 为什么挂在管理端（/admin）？
-     *   预热是运营在活动开始前手动触发的动作，普通用户不该能调。
+     * 挂在管理端是因为预热由运营在活动开始前手动触发，普通用户不该能调；
+     * 用 POST 是因为它写 Redis，有副作用。但它天然幂等：同一个活动预热两次是
+     * "覆盖"而不是"叠加"，重复调用安全。
      *
-     * 为什么是 POST？
-     *   它会写 Redis（库存 key + 已购用户 Set），是有副作用的操作。
-     *   另外它天然可重复执行：同一个活动预热两次，结果是"覆盖"不是"叠加"，
-     *   所以重复调用是安全的（这点你实现时要保证，见下面提醒）。
-     *
-     * TODO(⑤ 加固)：目前管理端接口都没有 @NeedLogin，属于已知缺口。
-     *   预热接口裸奔意味着任何人 POST 一下就能重置 Redis 库存，是高危操作。
-     *   这一批 admin 接口的统一鉴权放到 ⑤ 阶段处理。
+     * TODO(⑤ 加固)：目前管理端接口都没有 @NeedLogin。预热能重置 Redis 库存，
+     *   裸奔属于高危操作，统一鉴权放到 ⑤ 阶段处理。
      */
     @PostMapping("/admin/seckill-activities/{activityId}/warm-up")
     public ApiResponse<EmptyVO> warmUp(

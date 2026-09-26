@@ -14,13 +14,25 @@ export const router = createRouter({
     { path: '/user/:userId(\\d+)', component: () => import('@/pages/UserHomePage.vue') },
     { path: '/user-center', redirect: '/user-center/info' },
     {
-      path: '/user-center/:section(info|collect|note)',
+      path: '/user-center/:section(info|collect|note|course)',
       component: () => import('@/pages/UserCenterPage.vue'),
       meta: { auth: true },
     },
     {
       path: '/messages',
       component: () => import('@/pages/MessagesPage.vue'),
+      meta: { auth: true },
+    },
+    // 浏览秒杀活动不需要登录，后端那个接口也没标 @NeedLogin
+    { path: '/seckill', component: () => import('@/pages/SeckillPage.vue') },
+    {
+      path: '/seckill/orders',
+      component: () => import('@/pages/SeckillOrdersPage.vue'),
+      meta: { auth: true },
+    },
+    {
+      path: '/my-courses',
+      component: () => import('@/pages/MyCoursesPage.vue'),
       meta: { auth: true },
     },
     { path: '/login', redirect: (to) => ({ path: '/', query: { ...to.query, login: '1' } }) },
@@ -52,6 +64,16 @@ export const router = createRouter({
     {
       path: '/admin/question-list/:questionListId(\\d+)',
       component: () => import('@/pages/admin/QuestionListDetailPage.vue'),
+      meta: { admin: true },
+    },
+    {
+      path: '/admin/course',
+      component: () => import('@/pages/admin/CoursesAdminPage.vue'),
+      meta: { admin: true },
+    },
+    {
+      path: '/admin/seckill-activity',
+      component: () => import('@/pages/admin/SeckillActivitiesAdminPage.vue'),
       meta: { admin: true },
     },
     {

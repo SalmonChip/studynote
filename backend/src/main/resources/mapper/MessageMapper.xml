@@ -114,14 +114,4 @@
         WHERE receiver_id = #{userId}
         AND is_read = false
     </select>
-
-    <select id="countUnreadByType" resultType="com.studynote.notes.model.vo.message.UnreadCountByType">
-        SELECT 
-            type,
-            COUNT(*) as count
-        FROM message
-        WHERE receiver_id = #{userId}
-        AND is_read = false
-        GROUP BY type
-    </select>
-</mapper> 
+</mapper>

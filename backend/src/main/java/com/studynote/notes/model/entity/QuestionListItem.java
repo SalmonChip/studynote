@@ -3,12 +3,6 @@ package com.studynote.notes.model.entity;
 import lombok.Data;
 import java.util.Date;
 
-/**
- * @ClassName QuestionListItem
- * @Description 题单-题目关联实体类
- * @LastChangeDate 2024-12-16 20:15
- * @Version v1.0
- */
 @Data
 public class QuestionListItem {
     /*

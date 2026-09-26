@@ -67,7 +67,7 @@ async function open(item: Message) {
           <div class="between">
             <div class="identity">
               <a-checkbox :value="item.messageId" :disabled="busy" />
-              <a-avatar :src="item.sender?.avatar" />
+              <a-avatar :src="item.sender?.avatarUrl" />
               <strong>{{ item.type === 3 ? '系统通知' : item.sender?.username }}</strong>
               <a-tag v-if="!item.isRead" color="blue">未读</a-tag>
             </div>

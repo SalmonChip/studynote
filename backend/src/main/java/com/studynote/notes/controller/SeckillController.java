@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.studynote.notes.model.base.ApiResponse;
 import com.studynote.notes.model.base.EmptyVO;
-import com.studynote.notes.model.entity.SeckillOrder;
+import com.studynote.notes.model.vo.seckill.SeckillActivityDetailVO;
+import com.studynote.notes.model.vo.seckill.SeckillOrderVO;
 import com.studynote.notes.service.SeckillService;
 
 import java.util.List;
@@ -41,30 +42,32 @@ public class SeckillController {
     }
     /**
      * 查询当前登录用户的秒杀订单列表。
-     * <p>
-     * 【注意没有路径参数】：查谁由 token 决定，不由前端指定。
-     * 加了 userId 参数就是越权漏洞。
-     * <p>
-     * 【和 pay 的路由为什么不会打架】
-     * 本接口是 {@code GET /api/seckill/orders}（2 段），
-     * pay 是 {@code POST /api/seckill/orders/{orderId}/pay}（4 段）。
-     * 段数不同，且 HTTP 方法也不同，Spring MVC 不会搞混。
-     * <p>
-     * 顺带一提 {@code POST /api/seckill/{activityId}} 和本路径都是 2 段，
-     * 但方法不同（POST vs GET），且即使同方法 Spring 也优先匹配
-     * <b>更具体的字面量路径</b>而不是路径变量。
+     * 没有路径参数：查谁由 token 决定，不由前端指定，加了 userId 参数就是越权漏洞。
+     * 与 POST /api/seckill/{activityId} 段数相同但方法不同，且 Spring MVC 优先匹配字面量路径而非路径变量，不会冲突。
      *
      * @return 订单列表，按下单时间倒序
      */
     @GetMapping("/seckill/orders")
-    public ApiResponse<List<SeckillOrder>> myOrders() {
+    public ApiResponse<List<SeckillOrderVO>> myOrders() {
         return seckillService.myOrders();
+    }
+
+    /**
+     * 查询当前可参与的秒杀活动列表（含课程信息），不需要登录。
+     * 路径用复数名词、与 /api/seckill/orders 保持一致；与 POST /seckill/{activityId} 不会冲突
+     * （方法不同，且字面量路径优先于路径变量）。
+     *
+     * @return 可参与的活动列表
+     */
+    @GetMapping("/seckill/activities")
+    public ApiResponse<List<SeckillActivityDetailVO>> activityListForUser() {
+        return seckillService.activityListForUser();
     }
 
     /**
      * 订单支付。
      *
-     * @param orderId 活动ID，必须为正整数。
+     * @param orderId 订单ID，必须为正整数。
      * @return 支付结果。
      */
     @PostMapping("/seckill/orders/{orderId}/pay")

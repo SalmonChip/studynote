@@ -8,14 +8,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
- * 【临时工具类，压测完就删掉】
+ * 临时工具类，压测完就删掉。
  *
  * 生成一批测试用 token，供 Apifox / 脚本并发压测。
- *
- * 为什么不用真用户？
- *   - JWT 是自签的（HS512 + secret），TokenInterceptor 只验签名、不查数据库
- *   - seckill_order.user_id 没有外键约束
- *   → 所以 900001~900050 这种"不存在的用户"完全能走通全流程
+ * 可以直接用不存在的用户 ID（900001~900050）：JWT 是自签的（HS512 + secret），
+ * TokenInterceptor 只验签名不查库，且 seckill_order.user_id 没有外键约束。
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)

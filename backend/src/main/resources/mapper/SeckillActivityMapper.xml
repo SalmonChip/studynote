@@ -14,6 +14,32 @@
         ORDER BY activity_id DESC
     </select>
 
+    <!--
+      用户端：可参与的秒杀活动 + 课程信息。
+      status = 1 只返回上架活动；end_time > NOW() 排除已结束的活动。
+      不排除 start_time > NOW() 的活动，前端要靠 startTime 显示“即将开始”倒计时。
+      每列都显式 AS 出驼峰别名：map-underscore-to-camel-case 只处理同名字段（如 a.activity_id → activityId），
+      不会把 c.title 变成 courseTitle。
+    -->
+    <select id="findAvailableWithCourse"
+            resultType="com.studynote.notes.model.vo.seckill.SeckillActivityDetailVO">
+        SELECT a.activity_id       AS activityId,
+               a.course_id         AS courseId,
+               c.title             AS courseTitle,
+               c.cover_url         AS courseCoverUrl,
+               c.description       AS courseDescription,
+               c.price             AS coursePrice,
+               a.seckill_price     AS seckillPrice,
+               a.stock             AS stock,
+               a.start_time        AS startTime,
+               a.end_time          AS endTime
+        FROM seckill_activity a
+                 JOIN course c ON c.course_id = a.course_id
+        WHERE a.status = 1
+          AND a.end_time > NOW()
+        ORDER BY a.start_time, a.activity_id
+    </select>
+
     <select id="findById" resultType="com.studynote.notes.model.entity.SeckillActivity">
         SELECT *
         FROM seckill_activity
@@ -65,15 +91,9 @@
     </update>
 
     <!--
-      【对账】候选活动：当前【不在】秒杀时间窗口内的活动。
-
-        "不在窗口内" = 已经结束 (end_time < now) 或 还没开始 (start_time > now)
-        换句话说，正在进行中的活动被【刻意排除】在外 ——
-        理由见 SeckillService#reconcileOne 的注释（DEL 集合的窗口 + MySQL stock 滞后），
-        这是正确性要求，不是性能优化。改动这个 WHERE 之前先把那段读完。
-
-        from 是时间下界：只修"最近结束"的活动，避免每轮都把全部历史活动空刷一遍。
-        对于"还没开始"的活动，它的 end_time 必然在将来，天然满足 end_time > from。
+      对账候选活动：当前不在秒杀时间窗口内的活动，即已结束 (end_time < now) 或未开始 (start_time > now)。
+      刻意排除进行中的活动是正确性要求，原因见 SeckillService#reconcileOne，改动该 WHERE 前先确认。
+      from 是时间下界，避免每轮空刷全部历史活动；未开始的活动 end_time 在将来，天然满足 end_time > from。
     -->
     <select id="findReconcileCandidates" resultType="java.lang.Integer">
         SELECT activity_id

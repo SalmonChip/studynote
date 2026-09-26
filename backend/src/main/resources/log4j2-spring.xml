@@ -45,9 +45,8 @@
         <!--
             临时诊断：CORS 拒绝时 DefaultCorsProcessor 会在这里打一行
             "Reject: 'xxx' origin is not allowed"。
-            这是排查 403 的【唯一】线索 —— 因为 CorsFilter 在 DispatcherServlet
-            之前就返回了，com.studynote 的日志里根本不会留下任何记录。
-            查完把 level 改回 info（或删掉这个 Logger）。
+            CorsFilter 在 DispatcherServlet 之前就返回，com.studynote 的日志里不会留下记录，
+            所以排查 403 只能看这里。查完把 level 改回 info（或删掉这个 Logger）。
         -->
         <Logger name="org.springframework.web.cors" level="debug" additivity="false">
             <AppenderRef ref="Console" />

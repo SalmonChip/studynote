@@ -3,12 +3,6 @@ package com.studynote.notes.model.entity;
 import lombok.Data;
 import java.util.Date;
 
-/**
- * @ClassName NoteLike
- * @Description 笔记点赞关联实体类
- * @LastChangeDate 2024-12-16 20:04
- * @Version v1.0
- */
 @Data
 public class NoteLike {
     /*

@@ -13,13 +13,15 @@ export interface Message {
   sender: {
     userId: string
     username: string
-    avatar: string
+    // 后端所有 VO 的头像字段都叫 avatarUrl，MessageVO.Sender 也不例外
+    avatarUrl: string
   }
   type: MessageType
   target?: {
-    type: TargetType
-    targetId: number
+    // 目标所属的题目。后端在目标笔记或题目已被删除时会给 null。
     question: QuestionSummary
+    targetId: number
+    targetType: TargetType
   }
   isRead: boolean
   content: string
