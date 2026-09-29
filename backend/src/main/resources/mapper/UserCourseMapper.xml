@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.studynote.notes.mapper.UserCourseMapper">
+
+    <!-- create_time 显式写 NOW()，避免插入 NULL -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.studynote.notes.model.entity.UserCourse">
+        INSERT INTO user_course (user_id, course_id, source, create_time)
+        VALUES (#{userId}, #{courseId}, #{source}, NOW())
+    </insert>
+
+    <select id="countByUserIdAndCourseId" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM user_course
+        WHERE user_id = #{userId}
+          AND course_id = #{courseId}
+    </select>
+
+    <select id="findByUserId" resultType="com.studynote.notes.model.vo.course.UserCourseVO">
+        SELECT uc.course_id,
+               c.title,
+               c.description,
+               c.cover_url,
+               c.price,
+               uc.source,
+               uc.create_time
+        FROM user_course uc
+                 JOIN course c ON c.course_id = uc.course_id
+        WHERE uc.user_id = #{userId}
+        ORDER BY uc.create_time DESC, uc.id DESC
+    </select>
+
+</mapper>
